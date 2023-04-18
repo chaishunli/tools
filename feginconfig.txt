@@ -1,0 +1,86 @@
+
+public class FeignClientConfiguration {
+
+  
+  @Bean
+  RequestInterceptor globalRequestInterceptor3() {
+    return template -> {
+      String tokenId = getHttpServletRequest().getHeader(AUTHORIZATION);
+      template.header(AUTHORIZATION, tokenId);
+    };
+  }
+
+  /*@Bean
+  @Primary
+  @Scope("prototype")
+  public Encoder multipartFormEncoder() {
+    return new SpringFormEncoder();
+  }*/
+
+  @Autowired
+  private ObjectFactory<HttpMessageConverters> messageConverters;
+
+  @Bean
+  public Encoder feignFormEncoder() {
+    return new SpringFormEncoder(new SpringEncoder(messageConverters));
+  }
+
+
+
+  private HttpServletRequest getHttpServletRequest() {
+    ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
+            .getRequestAttributes();
+    if (attributes == null) {
+      return null;
+    }
+    return attributes.getRequest();
+  }
+}
+
+
+
+
+	Map<String, Object> result = getAllParameter(request);
+    String dataType = request.getHeader("Content-Type").toString();
+    if ("application/json".equalsIgnoreCase(dataType)) {
+      return idmClient.authenticate(amConfig.getApiKey(),flowName,result);
+    }
+    MultipartFile megliveData = (MultipartFile)result.get("megliveData");
+    String useCase = result.get("useCase").toString();
+    String user = result.get("user").toString();
+	
+public  Map<String, Object> getAllParameter(HttpServletRequest request) {
+	Map<String, Object> parameter = null;
+	try (InputStream is = request.getInputStream()) {
+	  String json = IOUtils.toString(is, "utf-8");
+	  parameter = JSONObject.parseObject(json, Map.class);
+	} catch (Exception ex) {
+	  log.error("read http request failed.", ex);
+	  throw new BusinessException("77777","idv getallparamter error");
+	}
+	if (Objects.isNull(parameter)) {
+	  parameter = Maps.newHashMap();
+	}
+	/*if (request.getParameterMap() != null) {
+	  parameter.putAll(request.getParameterMap());
+	}*/
+	try {
+
+	  if (!"application/json".equalsIgnoreCase(request.getContentType())) {
+		Enumeration<String> parameterNames = request.getParameterNames();
+		MultipartHttpServletRequest multpart = (MultipartHttpServletRequest) request;
+		Map<String, MultipartFile> fileMap = multpart.getFileMap();
+		parameter.putAll(fileMap);
+		if (parameterNames != null) {
+		  while (parameterNames.hasMoreElements()) {
+			String name = parameterNames.nextElement();
+			parameter.put(name, request.getParameter(name));
+		  }
+		}
+	  }
+	} catch (Exception e) {
+	  log.error("read http request failed2.", e);
+	  throw new BusinessException("88888","idv getallparamter error");
+	}
+	return parameter;
+}
