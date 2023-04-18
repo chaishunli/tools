@@ -1,0 +1,44 @@
+spring: 
+  redis:
+    password: xIxoXuqehifR
+    cluster:
+      #nodes: 10.133.2.84:6379
+      #max-redirects: 3
+      #redisson config
+      address: 10.133.2.84:6379
+      password: xIxoXuqehifR
+      connectTimeout: 10000
+      timeout: 5000
+      retryAttempts: 3
+      retryInterval: 1000
+redis:
+  clusterServersConfig:
+    idleConnectionTimeout: 10000
+    connectTimeout: 10000
+    timeout: 3000
+    retryAttempts: 3
+    retryInterval: 1500
+    failedSlaveReconnectionInterval: 3000
+    failedSlaveCheckInterval: 60000
+    password: "xIxoXuqehifR"
+    subscriptionsPerConnection: 5
+    clientName: null
+    #    loadBalancer: !<org.redisson.connection.balancer.RoundRobinLoadBalancer> { }
+    subscriptionConnectionMinimumIdleSize: 1
+    subscriptionConnectionPoolSize: 50
+    slaveConnectionMinimumIdleSize: 24
+    slaveConnectionPoolSize: 64
+    masterConnectionMinimumIdleSize: 24
+    masterConnectionPoolSize: 64
+    readMode: "SLAVE"
+    subscriptionMode: "SLAVE"
+    nodeAddresses:
+      - "redis://10.133.2.84:6379"
+    scanInterval: 1000
+    pingConnectionInterval: 30000
+    keepAlive: false
+    tcpNoDelay: true
+    threads: 16
+    nettyThreads: 32
+    #  codec: !<org.redisson.codec.MarshallingCodec> { }
+    transportMode: "NIO"
