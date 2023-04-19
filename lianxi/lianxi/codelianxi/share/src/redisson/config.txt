@@ -42,3 +42,17 @@ redis:
     nettyThreads: 32
     #  codec: !<org.redisson.codec.MarshallingCodec> { }
     transportMode: "NIO"
+	
+	
+	
+	<dependency>
+      <groupId>org.redisson</groupId>
+      <artifactId>redisson</artifactId>
+      <version>3.15.1</version>
+    </dependency>
+	
+	<dependency>
+      <groupId>org.redisson</groupId>
+      <artifactId>redisson-spring-boot-starter</artifactId>
+      <version>3.20.0</version>
+    </dependency>
